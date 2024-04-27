@@ -3,6 +3,13 @@ import request from 'request';
 import { load } from 'cheerio';
 const app = express();
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Allow any origin
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 app.get('/', function (req, res) {
   let url = 'https://www.bcv.org.ve';
 
