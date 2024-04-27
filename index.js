@@ -6,7 +6,7 @@ const app = express();
 // Middleware to verify the presence and value of the X-RapidAPI-Proxy-Secret header
 const rapidAPIMiddleware = (req, res, next) => {
   const rapidAPIProxySecret = req.headers['x-rapidapi-proxy-secret'];
-  if (!rapidAPIProxySecret || rapidAPIProxySecret !== YOUR_RAPIDAPI_PROXY_SECRET) {
+  if (!rapidAPIProxySecret || rapidAPIProxySecret !== process.env.RAPIDAPI_PROXY_SECRET) {
     return res.status(403).json({ error: 'Unauthorized' });
   }
   next();
