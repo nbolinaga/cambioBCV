@@ -1,6 +1,8 @@
 import express from 'express';
 import request from 'request';
 import { load } from 'cheerio';
+import fs from 'fs';
+
 const app = express();
 
 // Middleware to verify the presence and value of the X-RapidAPI-Proxy-Secret header
@@ -12,6 +14,14 @@ const rapidAPIMiddleware = (req, res, next) => {
   next();
 };
 
+// Function to check if the data in JSON file is from today
+const isDataFromToday = (dateString) => {
+  const today = new Date().toISOString().slice(0, 10);
+  return dateString === today;
+};
+
+const jsonFilePath = 'data.json';
+
 app.use(express.json());
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*'); // Allow any origin
@@ -21,6 +31,13 @@ app.use((req, res, next) => {
 });
 
 app.get('/', rapidAPIMiddleware, function (req, res) {
+  if (fs.existsSync(jsonFilePath)) {
+    const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
+    if (isDataFromToday(jsonData.date)) {
+      return res.json(jsonData.data);
+    }
+  }
+
   let url = 'https://www.bcv.org.ve';
 
   request({
@@ -32,14 +49,20 @@ app.get('/', rapidAPIMiddleware, function (req, res) {
       let $ = load(html);
       const dolar = $('div#dolar strong').text().trim();
       const euro = $('div#euro strong').text().trim();
-      const date = $('div#titulo1').siblings().eq(6).text().trim();
+      const fecha = $('div#titulo1').siblings().eq(6).text().trim();
 
       let obj = {
-        "fecha": date,
-        "dolar": dolar,
-        "euro": euro
+        "date": new Date().toISOString().slice(0, 10),
+        "data": {
+          "fecha": fecha,
+          "dolar": dolar,
+          "euro": euro
+        }
       };
-      res.send(obj);
+
+      fs.writeFileSync(jsonFilePath, JSON.stringify(obj), 'utf8');
+
+      res.json(obj.data);
     }
   });
 });
