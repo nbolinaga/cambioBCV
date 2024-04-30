@@ -49,6 +49,9 @@ app.get('/', rapidAPIMiddleware, function (req, res) {
       let $ = load(html);
       const dolar = $('div#dolar strong').text().trim();
       const euro = $('div#euro strong').text().trim();
+      const yuan = $('div#yuan strong').text().trim();
+      const lira = $('div#lira strong').text().trim();
+      const rublo = $('div#rublo strong').text().trim();
       const fecha = $('div#titulo1').siblings().eq(6).text().trim();
 
       let obj = {
@@ -56,7 +59,10 @@ app.get('/', rapidAPIMiddleware, function (req, res) {
         "data": {
           "fecha": fecha,
           "dolar": dolar,
-          "euro": euro
+          "euro": euro,
+          "yuan": yuan,
+          "lira": lira,
+          "rublo": rublo
         }
       };
 
