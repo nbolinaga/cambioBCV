@@ -30,10 +30,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/historical', function (req, res) {
+app.get('/historico', function (req, res) {
   if (fs.existsSync(jsonFilePath)) {
     const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
-    res.json(jsonData.historical || []);
+    res.json(jsonData.historico || []);
   } else {
     res.json([]);
   }
@@ -73,9 +73,9 @@ app.get('/', rapidAPIMiddleware, function (req, res) {
           "lira": lira,
           "rublo": rublo
         },
-        "historical": [
+        "historico": [
           // Save the data in historical array withput erasing the previous data
-          ...(fs.existsSync(jsonFilePath) ? JSON.parse(fs.readFileSync(jsonFilePath, 'utf8')).historical : []),
+          ...(fs.existsSync(jsonFilePath) ? JSON.parse(fs.readFileSync(jsonFilePath, 'utf8')).historico : []),
           {
             "fecha": fecha,
             "dolar": dolar,
