@@ -30,7 +30,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/historico', function (req, res) {
+app.get('/historico', rapidAPIMiddleware, function (req, res) {
   if (fs.existsSync(jsonFilePath)) {
     const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
     res.json(jsonData.historico || []);
