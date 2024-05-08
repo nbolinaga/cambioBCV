@@ -7,6 +7,7 @@ TO-DO:
 > Cambios paralelos  
 
 ```
+endpoint "/"
 {
     "fecha": String,
     "dolar": String,
@@ -15,4 +16,34 @@ TO-DO:
     "lira": String,
     "rublo": String
 }
+
+endpoint "/historico"
+[
+...
+{
+    "fecha": String,
+    "dolar": String,
+    "euro": String,
+    "yuan": String,
+    "lira": String,
+    "rublo": String
+},
+{
+    "fecha": String,
+    "dolar": String,
+    "euro": String,
+    "yuan": String,
+    "lira": String,
+    "rublo": String
+},
+{
+    "fecha": String,
+    "dolar": String,
+    "euro": String,
+    "yuan": String,
+    "lira": String,
+    "rublo": String
+}
+...
+]
 ```
