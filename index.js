@@ -30,6 +30,15 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/historical', function (req, res) {
+  if (fs.existsSync(jsonFilePath)) {
+    const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
+    res.json(jsonData.historical || []);
+  } else {
+    res.json([]);
+  }
+});
+
 app.get('/', rapidAPIMiddleware, function (req, res) {
   if (fs.existsSync(jsonFilePath)) {
     const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
@@ -63,7 +72,19 @@ app.get('/', rapidAPIMiddleware, function (req, res) {
           "yuan": yuan,
           "lira": lira,
           "rublo": rublo
-        }
+        },
+        "historical": [
+          // Save the data in historical array withput erasing the previous data
+          ...(fs.existsSync(jsonFilePath) ? JSON.parse(fs.readFileSync(jsonFilePath, 'utf8')).historical : []),
+          {
+            "fecha": fecha,
+            "dolar": dolar,
+            "euro": euro,
+            "yuan": yuan,
+            "lira": lira,
+            "rublo": rublo
+          }
+        ]
       };
 
       fs.writeFileSync(jsonFilePath, JSON.stringify(obj), 'utf8');
